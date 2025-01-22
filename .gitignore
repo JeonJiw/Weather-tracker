@@ -7,6 +7,10 @@ yarn-error.log*
 lerna-debug.log*
 .pnpm-debug.log*
 
+# Environment
+.env
+.env.local
+
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
@@ -128,3 +132,23 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+
+# React build output
+/build
+*.pem
+/client/build
+/client/coverage
+
+# IDE configuration
+.idea
+.vscode
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes

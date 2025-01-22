@@ -1,4 +1,6 @@
-const express = require("express");
+import express from "express";
+import { run } from "./config/db.js";
+
 const app = express();
 const PORT = 5003;
 
@@ -9,6 +11,9 @@ app.use(express.json());
 app.get("/", (req, res) => {
   res.send("Server is running!");
 });
+
+// Connect to MongoDB
+run();
 
 // Start server
 app.listen(PORT, () => {
