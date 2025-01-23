@@ -15,7 +15,7 @@ A web application that provides weather information with data persistence capabi
 
 - Frontend: React, TailwindCSS, Axios
 - Backend: Node.js, Express, Bsrypt
-- Database: MySQL
+- Database: MongoDB
 - APIs: OpenWeatherMap, Google Maps
 
 # Frontend dependencies
@@ -98,10 +98,7 @@ REACT_APP_API_URL=http://localhost:8000
 
 ```env
 PORT=8000
-DB_HOST=localhost
-DB_USER=root
-DB_PASSWORD=root1234
-DB_NAME=weather_app
+MONGODB_URI
 OPENWEATHER_API_KEY=
 GOOGLE_MAPS_API_KEY=
 CORS_ORIGIN=http://localhost:3000
