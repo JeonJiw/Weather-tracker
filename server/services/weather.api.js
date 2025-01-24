@@ -16,8 +16,6 @@ class WeatherAPI {
 
   async getWeatherData(location, start, end) {
     try {
-      console.log("Requesting weather data for:", { location, start, end });
-
       const response = await this.client.get("/forecast.json", {
         params: {
           q: location,
@@ -25,6 +23,12 @@ class WeatherAPI {
           aqi: "no",
         },
       });
+
+      response.data.forecast.forecastday =
+        response.data.forecast.forecastday.filter((day) => {
+          const date = day.date;
+          return date >= start && date <= end;
+        });
 
       return response.data;
     } catch (error) {

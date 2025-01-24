@@ -1,10 +1,11 @@
 import weatherService from "../services/weather.service.js";
 import WeatherSearch from "../models/weatherSearch.model.js";
+import WeatherAPI from "../services/weather.api.js";
 
 export const getWeatherData = async (req, res) => {
   try {
     const { location, start, end } = req.query;
-
+    console.log("Backend Date: ", req.query);
     // 1. Validate required parameters
     if (!location) {
       return res.status(400).json({ message: "Location is required" });
@@ -46,6 +47,18 @@ export const getWeatherData = async (req, res) => {
     res.json(weatherData);
   } catch (error) {
     console.error("Weather Controller Error:", error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const searchLocation = async (req, res) => {
+  try {
+    const { q } = req.query;
+    if (!q) return res.status(400).json({ message: "Query required" });
+
+    const data = await WeatherAPI.searchLocation(q);
+    res.json(data);
+  } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
