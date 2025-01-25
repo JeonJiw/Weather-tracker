@@ -5,7 +5,6 @@ import WeatherAPI from "../services/weather.api.js";
 export const getWeatherData = async (req, res) => {
   try {
     const { location, start, end } = req.query;
-    console.log("Backend Date: ", req.query);
     // 1. Validate required parameters
     if (!location) {
       return res.status(400).json({ message: "Location is required" });
