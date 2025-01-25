@@ -142,7 +142,10 @@ export default function WeatherPage() {
                 disabled={!location?.name || !startDate || isLoading}
                 isLoading={isLoading}
               />
-              <WeatherDashboard weatherData={weatherData} />
+              <WeatherDashboard
+                weatherData={weatherData}
+                fetchSavedSearches={fetchSavedSearches}
+              />
               {error && (
                 <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-600">
                   {error}

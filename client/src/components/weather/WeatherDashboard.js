@@ -3,7 +3,7 @@ import { MapPin, Droplets, Cloud } from "lucide-react";
 import SaveButton from "../saves/SaveButton";
 import axios from "axios";
 
-const WeatherDashboard = ({ weatherData }) => {
+const WeatherDashboard = ({ weatherData, fetchSavedSearches }) => {
   const [isSaving, setIsSaving] = useState(false);
 
   const handleSave = async (memo, password) => {
@@ -24,7 +24,7 @@ const WeatherDashboard = ({ weatherData }) => {
         `${process.env.REACT_APP_API_URL}/weather/saved`,
         requestBody
       );
-
+      fetchSavedSearches();
       alert("✅ Weather data saved successfully!");
     } catch (error) {
       console.error("Error saving weather data:", error);
