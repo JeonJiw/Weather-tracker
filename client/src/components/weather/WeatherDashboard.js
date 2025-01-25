@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { MapPin, Droplets, Cloud } from "lucide-react";
 import SaveButton from "../saves/SaveButton";
 import axios from "axios";
+import ExportButtons from "../export/ExportButton";
 
 const WeatherDashboard = ({ weatherData, fetchSavedSearches }) => {
   const [isSaving, setIsSaving] = useState(false);
@@ -120,6 +121,7 @@ const WeatherDashboard = ({ weatherData, fetchSavedSearches }) => {
           </div>
         ))}
       </div>
+      <ExportButtons weatherData={weatherData} />
     </div>
   );
 };
