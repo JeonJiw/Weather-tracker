@@ -49,40 +49,15 @@ Required API Keys:
 
 ## Database Schema
 
-````sql
--- Searches table
-CREATE TABLE searches (
- id VARCHAR(36) PRIMARY KEY,
- location VARCHAR(255) NOT NULL,
- start_date DATE NOT NULL,
- end_date DATE NOT NULL,
- password_hash VARCHAR(255) NOT NULL,
- memo TEXT,
- created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
- updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
- INDEX idx_location (location),
- INDEX idx_dates (start_date, end_date)
-);
-
--- Weather data table
-CREATE TABLE weather_data (
- id VARCHAR(36) PRIMARY KEY,
- search_id VARCHAR(36),
- temperature DECIMAL(5,2),
- humidity INT,
- description VARCHAR(255),
- date DATE,
- FOREIGN KEY (search_id) REFERENCES searches(id)
-);
-
 ## Scripts
+
 ```bash
 # Frontend
 npm start   # Run on port 3000
 
 # Backend
 npm run dev # Run on port 5003
-````
+```
 
 ## Environment Variables
 

@@ -1,15 +1,46 @@
-import React from "react";
+import React, { useState } from "react";
 import { MapPin, Droplets, Cloud } from "lucide-react";
 import SaveButton from "../saves/SaveButton";
+import axios from "axios";
 
-const WeatherDashboard = ({ weatherData, onSave }) => {
+const WeatherDashboard = ({ weatherData }) => {
+  const [isSaving, setIsSaving] = useState(false);
+
+  const handleSave = async (memo, password) => {
+    setIsSaving(true);
+    try {
+      const requestBody = {
+        location: weatherData.location,
+        searchParams: {
+          startDate: weatherData.forecast[0].date,
+          endDate: weatherData.forecast[forecast.length - 1].date,
+        },
+        weatherData: weatherData,
+        memo: memo,
+        password: password,
+      };
+
+      await axios.post(
+        `${process.env.REACT_APP_API_URL}/weather/saved`,
+        requestBody
+      );
+
+      alert("✅ Weather data saved successfully!");
+    } catch (error) {
+      console.error("Error saving weather data:", error);
+      alert("❌ Failed to save weather data!");
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
   if (!weatherData) return null;
   const { location, current, forecast } = weatherData;
-  console.log("front:", weatherData);
+
   return (
     <div className="max-w-6xl mx-auto p-4">
       <h3 className="text-xl font-bold mb-4">Current Weather</h3>
-      <div className="flex items-center gap-4 mb-4">
+      <div className="flex items-center mb-4 justify-between">
         <div className="bg-gradient-to-br from-blue-600 via-blue-500 to-blue-400 rounded-lg shadow p-4 w-fit">
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
@@ -37,13 +68,7 @@ const WeatherDashboard = ({ weatherData, onSave }) => {
             </div>
           </div>
         </div>
-
-        <button
-          onClick={onSave}
-          className="ml-auto rounded-lg w-8 h-8 flex items-center justify-center bg-gray-200 text-gray-600 hover:bg-gray-300"
-        >
-          +
-        </button>
+        <SaveButton handleSave={handleSave} isSaving={isSaving} />
       </div>
 
       <h3 className="text-xl font-bold mb-4">{forecast.length}-Day Forecast</h3>

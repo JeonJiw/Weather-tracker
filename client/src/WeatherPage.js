@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import LocationSearch from "./components/search/LocationSearch";
 import DateRangeSelect from "./components/search/DateRangeSelect";
@@ -17,18 +17,49 @@ export default function WeatherPage() {
   const [weatherData, setWeatherData] = useState(null);
   const [savedSearches, setSavedSearches] = useState([]);
 
-  const handleSave = () => {
-    if (!weatherData) return;
+  useEffect(() => {
+    fetchSavedSearches();
+  }, []);
+  const fetchSavedSearches = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}/weather/saved`
+      );
+      const processedData = response.data.map((search) => ({
+        ...search,
+        location:
+          typeof search.location === "object"
+            ? search.location.name
+            : search.location,
+      }));
+      setSavedSearches(processedData);
+    } catch (error) {
+      console.error("Failed to fetch saved searches:", error);
+    }
+  };
 
-    const newSearch = {
-      id: Date.now(),
-      location: location.name,
-      startDate,
-      endDate,
-      date: new Date().toLocaleDateString(),
-      weatherData,
-    };
-    setSavedSearches([newSearch, ...savedSearches]);
+  const handleDeleteSearch = async (id, password) => {
+    try {
+      await axios.delete(
+        `${process.env.REACT_APP_API_URL}/weather/saved/${id}`,
+        { data: { password } }
+      );
+      fetchSavedSearches();
+    } catch (error) {
+      alert(error.response?.data?.message || "Failed to delete search");
+    }
+  };
+
+  const handleUpdateSearch = async (id, memo, password) => {
+    try {
+      await axios.put(`${process.env.REACT_APP_API_URL}/weather/saved/${id}`, {
+        memo,
+        password,
+      });
+      fetchSavedSearches();
+    } catch (error) {
+      alert(error.response?.data?.message || "Failed to update search");
+    }
   };
 
   const handleStartDateChange = (e) => {
@@ -73,17 +104,12 @@ export default function WeatherPage() {
           <div className="lg:col-span-1 bg-gray-50 rounded-xl shadow-lg">
             <SavedSearchList
               searches={savedSearches}
+              onDelete={handleDeleteSearch}
+              onUpdate={handleUpdateSearch}
               onSelect={(search) => {
                 setLocation({ name: search.location });
-                setStartDate(search.startDate);
-                setEndDate(search.endDate);
                 setWeatherData(search.weatherData);
               }}
-              onDelete={(id) =>
-                setSavedSearches((searches) =>
-                  searches.filter((s) => s.id !== id)
-                )
-              }
             />
           </div>
 
@@ -116,7 +142,7 @@ export default function WeatherPage() {
                 disabled={!location?.name || !startDate || isLoading}
                 isLoading={isLoading}
               />
-              <WeatherDashboard weatherData={weatherData} onSave={handleSave} />
+              <WeatherDashboard weatherData={weatherData} />
               {error && (
                 <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-600">
                   {error}
